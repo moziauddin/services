@@ -51,17 +51,7 @@
 
 <div id="page-footer" class="footer">
   <div id="page-footer-inner">
-    <span id="page-footer-inner-left" class="pull-left">
-      Supported by
-      <a href="http://www.anbg.gov.au/chah/">
-        <asset:image src="CHAH-logo.png" height="42"/>
-      </a>
-    </span>
-    <span id="page-footer-inner-right" class="pull-right">
-      <a href="https://twitter.com/aubiodiversity" class="twitter-link"><i class="fa fa-twitter fa-2x"
-                                                                           style="color: #55acee"></i>
-      </a>
-    </span>
+
 
     <div>
     </div>
