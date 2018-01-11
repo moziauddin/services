@@ -12,7 +12,7 @@
 <body>
 <div class="container">
 
-  <h2>APNI ${ConfigService.shardGroupName} statistics</h2>
+  <h2>${ConfigService.nameTreeName} ${ConfigService.shardGroupName} statistics</h2>
   <ul>
     <li>Services Version: <g:meta name="app.version"/></li>
     <g:each in="${stats}" var="info">
