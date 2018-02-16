@@ -154,4 +154,8 @@ class ConfigService {
     static String getShardsForSPARQL() {
         return getShardConfigOrfail('shards for SPARQL')
     }
+
+    static String getShardCode() {
+        return getShardConfigOrfail('shard code')
+    }
 }
