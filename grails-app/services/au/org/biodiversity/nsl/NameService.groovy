@@ -27,7 +27,7 @@ class NameService {
     def configService
     def restCallService
     def classificationService
-    def nameConstructionService
+    def nameConstructor
     def nameTreePathService
     def linkService
     def treeOperationsService
@@ -42,6 +42,14 @@ class NameService {
     static String CREATED_EVENT = 'created'
     static String UPDATED_EVENT = 'updated'
 
+    def getNameConstructor(){
+        if (!nameConstructor){
+            def shardCode = configService.getShardCode().toUpperCase()
+            nameConstructor = Class.forName(shardCode+"NameConstruction").newInstance()
+        }
+        return nameConstructor
+
+    }
     /**
      * Check if the parent of this name has changed and if so update the APNI tree and the NameTreePath then update
      * the NslSimpleName record.
@@ -296,11 +304,11 @@ class NameService {
 
 
     private void updateFullName(Name name) {
-        Map fullNameMap = nameConstructionService.constructName(name)
+        Map fullNameMap = getNameConstructor().constructName(name)
         name.fullNameHtml = fullNameMap.fullMarkedUpName
         name.simpleNameHtml = fullNameMap.simpleMarkedUpName
-        name.simpleName = nameConstructionService.stripMarkUp(fullNameMap.simpleMarkedUpName)
-        name.fullName = nameConstructionService.stripMarkUp(fullNameMap.fullMarkedUpName)
+        name.simpleName = getNameConstructor().stripMarkUp(fullNameMap.simpleMarkedUpName)
+        name.fullName = getNameConstructor().stripMarkUp(fullNameMap.fullMarkedUpName)
         name.save()
     }
 
@@ -366,15 +374,15 @@ class NameService {
                 long start = System.currentTimeMillis()
                 Name.withSession { session ->
                     names.each { Name name ->
-                        Map constructedNames = nameConstructionService.constructName(name)
+                        Map constructedNames = getNameConstructor().constructName(name)
 
                         if (!(name.fullNameHtml && name.simpleNameHtml && name.fullName && name.simpleName && name.sortName) ||
                                 name.fullNameHtml != constructedNames.fullMarkedUpName) {
                             name.fullNameHtml = constructedNames.fullMarkedUpName
-                            name.fullName = nameConstructionService.stripMarkUp(constructedNames.fullMarkedUpName)
+                            name.fullName = getNameConstructor().stripMarkUp(constructedNames.fullMarkedUpName)
                             name.simpleNameHtml = constructedNames.simpleMarkedUpName
-                            name.simpleName = nameConstructionService.stripMarkUp(constructedNames.simpleMarkedUpName)
-                            name.sortName = nameConstructionService.makeSortName(name, name.simpleName)
+                            name.simpleName = getNameConstructor().stripMarkUp(constructedNames.simpleMarkedUpName)
+                            name.sortName = getNameConstructor().makeSortName(name, name.simpleName)
                             name.save()
 //                            log.debug "saved $name.fullName"
                         } else {
@@ -404,8 +412,8 @@ class NameService {
                 Name.withSession { session ->
                     names.each { Name name ->
                         try {
-                            Map constructedNames = nameConstructionService.constructName(name)
-                            String strippedName = nameConstructionService.stripMarkUp(constructedNames.fullMarkedUpName)
+                            Map constructedNames = getNameConstructor().constructName(name)
+                            String strippedName = getNameConstructor().stripMarkUp(constructedNames.fullMarkedUpName)
                             if (name.fullName != strippedName) {
                                 String msg = "$name.id, \"${name.nameType.name}\", \"${name.nameRank.name}\", \"$name.fullName\", \"${strippedName}\""
                                 log.info(msg)
@@ -441,7 +449,7 @@ class NameService {
                 long start = System.currentTimeMillis()
                 Name.withSession { session ->
                     names.each { Name name ->
-                        String sortName = nameConstructionService.makeSortName(name, name.simpleName)
+                        String sortName = getNameConstructor().makeSortName(name, name.simpleName)
                         if (!(name.sortName) || name.sortName != sortName) {
                             name.sortName = sortName
                             name.save()
@@ -476,12 +484,12 @@ or n.fullNameHtml is null""", params)
                 long start = System.currentTimeMillis()
                 Name.withSession { session ->
                     names.each { Name name ->
-                        Map constructedNames = nameConstructionService.constructName(name)
+                        Map constructedNames = getNameConstructor().constructName(name)
 
                         name.fullNameHtml = constructedNames.fullMarkedUpName
-                        name.fullName = nameConstructionService.stripMarkUp(constructedNames.fullMarkedUpName)
+                        name.fullName = getNameConstructor().stripMarkUp(constructedNames.fullMarkedUpName)
                         name.simpleNameHtml = constructedNames.simpleMarkedUpName
-                        name.simpleName = nameConstructionService.stripMarkUp(constructedNames.simpleMarkedUpName)
+                        name.simpleName = getNameConstructor().stripMarkUp(constructedNames.simpleMarkedUpName)
                         name.save()
                         log.debug "saved $name.fullName"
                     }
