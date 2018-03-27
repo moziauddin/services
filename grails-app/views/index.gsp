@@ -14,7 +14,7 @@
   <div class="card horizontal">
 
     <div class="card-image">
-      <asset:image src="${st.cardImage()}" height="300px"/>
+      <asset:image src="${st.cardImage().toString()}" height="300px"/>
     </div>
 
     <div class="card-stacked">
