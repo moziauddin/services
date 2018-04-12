@@ -52,9 +52,7 @@
 
       <ul class="nav navbar-nav navbar-right">
 
-        <li>
-          <st:documentationLink/>
-        </li>
+
 
         <shiro:isLoggedIn>
           <shiro:hasRole name="QA">
